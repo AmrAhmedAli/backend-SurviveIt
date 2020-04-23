@@ -8,7 +8,7 @@ const db = admin.firestore();
 router.post('/signin', function (req, res) {
     if(req.body.phoneNumber == null || req.body.phoneNumber == '' 
         || req.body.password == null || req.body.password == '' ){
-        res.err({status: 500, data: 'Please fill all required fields'});
+        res.status(500).send({ data: 'Please fill all required fields'});
       return;
     }
     admin.auth().getUserByPhoneNumber(req.body.phoneNumber)
@@ -17,7 +17,7 @@ router.post('/signin', function (req, res) {
         usersRef.where('phoneNumber', '==', req.body.phoneNumber).get()
         .then(snapshot => {
         if (snapshot.empty) {
-            res.err({status: 404, data:'No matching documents.'});
+            res.status(404).send({ data:'No matching documents.' });
             return;
         }
         snapshot.forEach(doc => {
@@ -26,7 +26,7 @@ router.post('/signin', function (req, res) {
                     res.send({status: 200, data: doc.data()});
                     return;
                 } else {
-                    res.err({status: 404, data: 'Authentication Error, Password doesnot match'});
+                    res.status(404).send({ data: 'Authentication Error, Password doesnot match' });
                     return;
                 } 
               });
@@ -35,7 +35,7 @@ router.post('/signin', function (req, res) {
 
     })
     .catch(function(error) {
-        res.err({status: 500, data: 'Error fetching user data:' + error});
+        res.status(500).send({ data: 'Error fetching user data:' + error });
     });
 })
 
@@ -45,7 +45,7 @@ router.post('/signup', function (req, res) {
         || req.body.name == null || req.body.name == '' 
         || req.body.nationalId == null || req.body.nationalId == '' 
         ){
-        res.err({status: 500, data: 'Please fill all required fields'});
+            res.status(500).send({ data: 'Please fill all required fields' });
       return;
     }
     admin.auth().createUser({
@@ -57,7 +57,7 @@ router.post('/signup', function (req, res) {
           console.log('Successfully created new user: ', userRecord.uid);
           bcrypt.hash(req.body.password, 10, function(err, hash) {
             if (err){
-                res.err({status: 500, data: 'Password Err. ' + err});
+                res.status(500).send({ data: 'Password Err. ' + err });
                 return;
             }
             let data = {
@@ -75,7 +75,7 @@ router.post('/signup', function (req, res) {
           
         })
         .catch(function(error) {
-            res.err({status: 500, data: 'Error creating new user: '+ error});
+            res.status(500).send({ data: 'Error creating new user: '+ error });
         });
 
 })

@@ -7,14 +7,14 @@ const db = admin.firestore();
 // define the home page route
 router.get('/getUserByPhoneNumber/:phoneNumber', function (req, res) {
     if(req.params.phoneNumber == null){
-        res.err({status: 500, data: 'Please enter a body'});
+      res.status(500).send({ data: 'Please enter a body'});
       return;
     }
     let usersRef = db.collection('users');
     usersRef.where('phoneNumber', '==', req.params.phoneNumber).get()
   .then(snapshot => {
     if (snapshot.empty) {
-      res.err({status: 404, data:'No matching documents.'});
+      res.status(500).send({data:'No matching documents.'});
       return;
     }  
 
@@ -23,20 +23,20 @@ router.get('/getUserByPhoneNumber/:phoneNumber', function (req, res) {
     });
   })
   .catch(err => {
-    res.err({status: 500, data: 'Error getting documents: ' + err});
+    res.status(500).send({data: 'Error getting documents: ' + err});
   });
 
 })
 router.get('/getUserByNationalID/:nationalID', function (req, res) {
     if(req.params.nationalID == null){
-      res.err({status: 500, data: 'Please enter a body'});
+      res.status(500).send({data: 'Please enter a body'});
       return;
     }
     let usersRef = db.collection('users');
     usersRef.where('nationalId', '==', req.params.nationalID).get()
   .then(snapshot => {
     if (snapshot.empty) {
-      res.err({status: 404, data:'No matching documents.'});
+      res.status(404).send({data:'No matching documents.'});
       return;
     }  
 
@@ -45,21 +45,21 @@ router.get('/getUserByNationalID/:nationalID', function (req, res) {
     });
   })
   .catch(err => {
-    res.err({status: 500, data: 'Error getting documents: '+ err});
+    res.status(500).send({ data: 'Error getting documents: '+ err});
   });
 
 })
 
 router.post('/addLocation', function(req, res){
   if(req.body.phoneNumber == null || req.body.location == null ){
-    res.err({status: 500, data: 'Please enter a body'});
+    res.status(500).send({ data: 'Please enter a body'});
     return;
   }
   let usersRef = db.collection('users');
   usersRef.where('phoneNumber', '==', req.body.phoneNumber).get()
   .then(snapshot => {
     if (snapshot.empty) {
-      res.err({status: 404, data:'User not found.'});
+      res.status(404).send({ data:'User not found.'});
       return;
     }  
 
@@ -81,7 +81,7 @@ router.post('/addLocation', function(req, res){
   });
 })
 .catch(err => {
-  res.err({status: 500, data: 'Error getting documents: '+ err});
+  res.status(500).send({ data: 'Error getting documents: '+ err });
 });
 
 })
