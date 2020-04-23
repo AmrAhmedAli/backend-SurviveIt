@@ -4,8 +4,7 @@ const bodyParser = require('body-parser');
 
 var users = require('./controllers/users')
 
-const hostname = '127.0.0.1';
-const port = 3000;
+const PORT = process.env.PORT || 3000
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -17,9 +16,7 @@ app.get('/', function (req, res) {
 
 app.use('/users', users)
 
-app.listen(process.env.PORT || port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${process.env.PORT || port}/`);
-});
+app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
 
 
