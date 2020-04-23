@@ -33,7 +33,7 @@ router.get('/getUserByNationalID/:nationalID', function (req, res) {
       return;
     }
     let usersRef = db.collection('users');
-    usersRef.where('nationalID', '==', req.params.nationalID).get()
+    usersRef.where('nationalId', '==', req.params.nationalID).get()
   .then(snapshot => {
     if (snapshot.empty) {
       res.send({status: 404, data:'No matching documents.'});
