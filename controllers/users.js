@@ -86,4 +86,32 @@ router.post('/addLocation', function(req, res){
 
 })
 
+router.post('/setcreditcard', function(req, res){
+  if(req.body.creditcard == null || req.body.phoneNumber == null ){
+    res.status(500).send({ data: 'Please enter a body'});
+    return;
+  }
+  let usersRef = db.collection('users');
+  usersRef.where('phoneNumber', '==', req.body.phoneNumber).get()
+  .then(snapshot => {
+    if (snapshot.empty) {
+      res.status(404).send({ data:'User not found.'});
+      return;
+    }  
+
+  snapshot.forEach(doc => {
+    usersRef
+    .doc(doc.id).update({
+      creditcard: req.body.creditcard,
+      paymentSetup: true
+    }).then(function(aa){
+        res.send({status: 200});
+        return;
+    })
+  });
+})
+.catch(err => {
+  res.status(500).send({ data: 'Error getting documents: '+ err });
+});
+})
 module.exports = router
