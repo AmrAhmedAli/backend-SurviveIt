@@ -3,13 +3,6 @@ var router = express.Router()
 
 var admin = require("firebase-admin");
 
-var serviceAccount = require("../firebaseutils/surviveit-8bd20-firebase-adminsdk-2ghk2-bb0dbd88a3.json");
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://surviveit-8bd20.firebaseio.com"
-});
-
 const db = admin.firestore();
 // define the home page route
 router.get('/getUserByPhoneNumber/:phoneNumber', function (req, res) {
@@ -30,7 +23,7 @@ router.get('/getUserByPhoneNumber/:phoneNumber', function (req, res) {
     });
   })
   .catch(err => {
-    res.send({status: 500, data: 'Error getting documents '});
+    res.send({status: 500, data: 'Error getting documents: ' + err});
   });
 
 })
@@ -52,13 +45,10 @@ router.get('/getUserByNationalID/:nationalID', function (req, res) {
     });
   })
   .catch(err => {
-    res.send({status: 500, data: 'Error getting documents '});
+    res.send({status: 500, data: 'Error getting documents: '+ err});
   });
 
 })
-// define the about route
-router.get('/about', function (req, res) {
-  res.send('About Users')
-})
+
 
 module.exports = router
