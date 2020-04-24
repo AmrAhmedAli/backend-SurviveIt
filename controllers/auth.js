@@ -67,7 +67,12 @@ router.post('/signup', function (req, res) {
                 nationalId:req.body.nationalId,
                 paymentSetup: false,
                 infected: false,
-                suspect: false
+                suspect: false,
+                severityStatus:{
+                    severity: 0,
+                    date: '-',
+                    time: '-'
+                }
               };
               
               db.collection('users').doc(userRecord.uid).set(data).then(function(data1){
